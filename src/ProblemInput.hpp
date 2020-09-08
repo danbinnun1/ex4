@@ -8,7 +8,7 @@ private:
   std::vector<std::string> m_inputRows;
 
 public:
-  ProblemInput(const std::string &problem, const std::string &alg);
+  ProblemInput(const std::string& problemRequest);
   Problem parse() const;
   void addRow(const std::string& row);
 };
