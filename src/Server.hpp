@@ -3,6 +3,6 @@
 namespace server_side {
 class Server {
 public:
-  virtual void open(int port, uint32_t maxClients) = 0;
+  virtual void open(int port) = 0;
 };
 }
