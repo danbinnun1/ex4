@@ -7,7 +7,7 @@ private:
   ErrorCode m_code;
 
 public:
-  ProblemException(const ErrorCode code);
+  ProblemException(ErrorCode code);
   int getCode() const;
 };
 } // namespace server_side

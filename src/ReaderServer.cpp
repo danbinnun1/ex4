@@ -17,7 +17,7 @@ void server_side::ReaderServer::serveClient(const int connfd,
                                             const std::string &problem,
                                             const std::string &alg) {
   char buffer[1024]={0};
-  try{
+  
       read(connfd,buffer,sizeof(buffer));
       std::unique_ptr<ProblemInput> input=std::make_unique<ProblemInput>(buffer);
       bool clientFinished=false;
@@ -29,5 +29,5 @@ void server_side::ReaderServer::serveClient(const int connfd,
           //read(connfd,buffer, sizeof(buffer));
       }
       
-  }
+  
 }
