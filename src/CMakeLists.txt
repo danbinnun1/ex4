@@ -15,7 +15,7 @@ link_directories(${CMAKE_SOURCE_DIR})
 link_directories(${CMAKE_SOURCE_DIR}/matrix)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "./bin")
-add_executable(ex3.out main.cpp MatrixCreate.cpp matrix/Matrix.cpp matrix/MatrixException.cpp ProblemException.cpp FindGraphPathInfo.cpp GraphPath.cpp)
+add_executable(ex3.out main.cpp Cache.cpp MatrixCreate.cpp matrix/Matrix.cpp matrix/MatrixException.cpp ProblemException.cpp FindGraphPathInfo.cpp GraphPath.cpp file_reading.cpp)
 
 
 target_link_libraries(ex3.out matrix)
