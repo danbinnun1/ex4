@@ -54,10 +54,17 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
       throw ProblemException(MATRIX_ROW_LENGTH_NOT_EQUAL_TO_WIDTH);
     }
     for (uint32_t j = 0; j < width; ++j) {
-      if (!is_double(matrixRow[j])) {
-        throw ProblemException(MATRIX_VALUE_IS_NOT_DOUBLE);
+      if (is_double(matrixRow[j])) {
+        double value = std::stod(matrixRow[j]);
+        if (value < 1) {
+          throw ProblemException(VALUE_IS_LESS_THAN_ONE);
+        }
+        matrix.setValue(i, j, std::stod(matrixRow[j]));
       }
-      matrix.setValue(i, j, std::stod(matrixRow[j]));
+      if (matrixRow[j]=="b"){
+        matrix.setValue(i,j,-1);
+      }
+      throw ProblemException(MATRIX_VALUE_IS_INVALID);
     }
   }
   auto startPoint = splitByComma(rows[rows.size() - 2]);
