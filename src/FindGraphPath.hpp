@@ -4,7 +4,7 @@
 #include "matrix/Matrix.hpp"
 namespace server_side {
 class FindGraphPath : public Problem {
-private:
+protected:
   FindGraphPathInfo info;
 
 public:
@@ -12,5 +12,8 @@ public:
                 const uint32_t startCol, const uint32_t endRow,
                 const uint32_t endCol);
   virtual ~FindGraphPath() = default;
+  std::unique_ptr<Solution> solve() const override;
+  virtual std::unique_ptr<Solution> solveProblem() const = 0;
+
 };
 } // namespace server_side

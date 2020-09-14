@@ -1,5 +1,8 @@
 #pragma once
 #include "matrix/Matrix.hpp"
+#include "GraphElement.hpp"
+#include "Solution.hpp"
+#include "GraphPathService.hpp"
 namespace server_side {
 class FindGraphPathInfo {
 private:

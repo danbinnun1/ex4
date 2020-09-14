@@ -3,7 +3,7 @@
 
 server_side::GraphPath::GraphPath(const std::string &algorithm,
                                   const std::vector<Direction> &path,
-                                  uint32_t pathWeight)
+                                  double pathWeight)
     : m_path(path), m_algorithm(algorithm), m_pathWeight(pathWeight) {}
 std::string server_side::GraphPath::toString() const {
   std::string s = "";
@@ -23,4 +23,8 @@ std::string server_side::GraphPath::toString() const {
     }
   }
   return s;
+}
+
+server_side::GraphPath::GraphPath(std::string s){
+
 }
