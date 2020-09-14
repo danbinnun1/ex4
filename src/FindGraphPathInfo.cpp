@@ -19,8 +19,8 @@ uint32_t server_side::FindGraphPathInfo::getHash() const {
   s += ",";
   s += std::to_string(m_endCol);
   s += "\n";
-  for (int i = 0; i < m_matrix.getHeight(); ++i) {
-    for (int j = 0; j < m_matrix.getWidth(); ++j) {
+  for (uint32_t i = 0; i < m_matrix.getHeight(); ++i) {
+    for (uint32_t j = 0; j < m_matrix.getWidth(); ++j) {
       s += std::to_string(m_matrix(i, j));
       s += ",";
     }

@@ -2,30 +2,29 @@
 #include "Direction.hpp"
 #include <vector>
 
-using namespace server_side;
 
 server_side::GraphPathService::GraphPathService()
     : m_path(std::vector<Direction>()), m_pathWeight(0), m_lastWeight(0) {}
 
-void GraphPathService::addDirection(Direction d, double weight){
+void server_side::GraphPathService::addDirection(Direction d, double weight){
     m_path.push_back(d);
     m_pathWeight += weight;
     m_lastWeight = weight;
 }
 
-std::vector<Direction> GraphPathService::getPath() const{
+std::vector<server_side::Direction> server_side::GraphPathService::getPath() const{
     return m_path;
 }
 
-double GraphPathService::getPathWeight() const{
+double server_side::GraphPathService::getPathWeight() const{
     return m_pathWeight;
 }
 
-double GraphPathService::getLastWeight() const{
+double server_side::GraphPathService::getLastWeight() const{
     return m_lastWeight;
 }
 
-GraphElement GraphPathService::applyPath(FindGraphPathInfo info){
+server_side::GraphElement server_side::GraphPathService::applyPath(server_side::FindGraphPathInfo info){
   uint32_t row = info.getStartRow();
   uint32_t col = info.getStartCol();
   for(Direction d : m_path){
@@ -45,12 +44,12 @@ GraphElement GraphPathService::applyPath(FindGraphPathInfo info){
   return GraphElement(row, col);
 }
 
-bool LargerThanByLastWeight::operator()(const GraphPathService& lhs, const GraphPathService& rhs) const
+bool server_side::LargerThanByLastWeight::operator()(const GraphPathService& lhs, const GraphPathService& rhs) const
 {
   return lhs.getPathWeight() > rhs.getPathWeight();
 }
 
-bool LargerThanByLastWeight::operator()(const GraphPathService& lhs, const GraphPathService& rhs) const
+bool server_side::LargerThanByLastWeight::operator()(const GraphPathService& lhs, const GraphPathService& rhs) const
 {
   return lhs.getLastWeight() > rhs.getLastWeight();
 }

@@ -1,6 +1,7 @@
 #include "GraphPath.hpp"
 #include "Direction.hpp"
 #include <regex>
+#include "split.hpp"
 server_side::GraphPath::GraphPath(const std::string &algorithm,
                                   const std::vector<Direction> &path,
                                   double pathWeight)
@@ -30,7 +31,7 @@ server_side::GraphPath::GraphPath(std::string s){
     m_pathWeight=std::stod(parts[0]);
     m_algorithm=parts[1];
     m_path=std::vector<Direction>();
-    for (int i=0;i<parts.size();++i){
+    for (uint32_t i=0;i<parts.size();++i){
         if (parts[i]=="Up"){
             m_path.push_back(Direction::up);
         }
@@ -44,15 +45,4 @@ server_side::GraphPath::GraphPath(std::string s){
             m_path.push_back(Direction::left);
         }
     }
-}
-
-std::vector<std::string> splitByComma(const std::string &str) {
-  std::vector<std::string> result;
-  std::stringstream s_stream(str); // create string stream from the string
-  while (s_stream.good()) {
-    std::string substr;
-    std::getline(s_stream, substr, ','); // get first string delimited by comma
-    result.push_back(substr);
-  }
-  return result;
 }

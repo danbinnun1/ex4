@@ -1,6 +1,7 @@
 #include "MatrixCreate.hpp"
 #include "ProblemException.hpp"
 #include <sstream>
+#include "split.hpp"
 
 bool is_double(std::string const &str) {
   auto result = double();
@@ -16,17 +17,6 @@ bool is_number(const std::string &s) {
     ++it;
   return !s.empty() && it == s.end();
 }
-std::vector<std::string> splitByComma(const std::string &str) {
-  std::vector<std::string> result;
-  std::stringstream s_stream(str); // create string stream from the string
-  while (s_stream.good()) {
-    std::string substr;
-    std::getline(s_stream, substr, ','); // get first string delimited by comma
-    result.push_back(substr);
-  }
-  return result;
-}
-
 server_side::FindGraphPathInfo
 server_side::parseMatrix(const std::vector<std::string> &rows) {
   if (rows.size() == 0) {
