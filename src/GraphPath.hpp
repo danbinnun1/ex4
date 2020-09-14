@@ -9,11 +9,11 @@ class GraphPath : public Solution {
 private:
   std::vector<Direction> m_path;
   std::string m_algorithm;
-  uint32_t m_pathWeight;
+  double m_pathWeight;
 
 public:
-  GraphPath(const std::string &algorithm, const std::vector<Direction> &path, uint32_t pathWeight);
+  GraphPath(const std::string &algorithm, const std::vector<Direction> &path, double pathWeight);
   std::string toString() const override;
+  GraphPath(std::string s);
 };
-
 }
