@@ -17,5 +17,6 @@ public:
   uint32_t getStartCol() const;
   uint32_t getEndRow() const;
   uint32_t getEndCol() const;
+  uint32_t getHash() const;
 };
 } // namespace server_side
