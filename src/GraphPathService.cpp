@@ -44,7 +44,7 @@ server_side::GraphElement server_side::GraphPathService::applyPath(server_side::
   return GraphElement(row, col);
 }
 
-bool server_side::LargerThanByLastWeight::operator()(const GraphPathService& lhs, const GraphPathService& rhs) const
+bool server_side::LargerThanByPathWeight::operator()(const GraphPathService& lhs, const GraphPathService& rhs) const
 {
   return lhs.getPathWeight() > rhs.getPathWeight();
 }

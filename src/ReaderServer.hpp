@@ -14,10 +14,10 @@ namespace server_side
         //amount of clients connected now
         uint32_t m_currentClients;
         //time to wait for the client to send
-        std::chrono::milliseconds m_waitTime;
+        long m_waitTime;
         void serveClient(const int connfd, const std::string& problem, const std::string& alg);
     public:
         void open(const int port) override;
-        ReaderServer(const std::string& end, uint32_t maxClients, std::chrono::milliseconds waitTime);
+        ReaderServer(const std::string& end, uint32_t maxClients, long waitTime);
     };
 }

@@ -15,8 +15,13 @@ link_directories(${CMAKE_SOURCE_DIR})
 link_directories(${CMAKE_SOURCE_DIR}/matrix)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "./bin")
-add_executable(ex3.out main.cpp crc32.c Cache.cpp split.cpp MatrixCreate.cpp matrix/Matrix.cpp matrix/MatrixException.cpp ProblemException.cpp FindGraphPathInfo.cpp GraphPath.cpp file_reading.cpp)
 
+
+add_executable(ex3.out main.cpp crc32.c Cache.cpp AStarProblem.cpp FindGraphPath.cpp BestFSProblem.cpp BFSProblem.cpp DFSProblem.cpp GraphPathService.cpp split.cpp GraphElement.cpp MatrixCreate.cpp matrix/Matrix.cpp matrix/MatrixException.cpp ProblemException.cpp FindGraphPathInfo.cpp GraphPath.cpp file_reading.cpp)
+find_package(Boost COMPONENTS thread system REQUIRED)
+
+include_directories(${Boost_INCLUDE_DIR})
+target_link_libraries(ex3.out ${Boost_LIBRARIES})
 
 target_link_libraries(ex3.out matrix)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

@@ -11,7 +11,7 @@
 using namespace server_side;
 
 std::unique_ptr<Solution> FindGraphPath::solve() const {
-    uint32_t hashCode = info.getHashCode();
+    uint32_t hashCode = info.getHash();
     if(solutionInCache(hashCode)){
         return std::make_unique<GraphPath>(searchByHash(hashCode));
     }

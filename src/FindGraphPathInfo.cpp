@@ -28,3 +28,18 @@ uint32_t server_side::FindGraphPathInfo::getHash() const {
   }
   return calculate_crc32c(0, (const unsigned char *)s.c_str(), s.size());
 }
+matrix::Matrix server_side::FindGraphPathInfo::getMatrix() const{
+  return m_matrix;
+}
+uint32_t server_side::FindGraphPathInfo::getStartRow() const{
+  return m_startRow;
+}
+uint32_t server_side::FindGraphPathInfo::getStartCol() const{
+  return m_startCol;
+}
+uint32_t server_side::FindGraphPathInfo::getEndRow() const{
+  return m_endRow;
+}
+uint32_t server_side::FindGraphPathInfo::getEndCol() const{
+  return m_endCol;
+}
