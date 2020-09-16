@@ -38,7 +38,7 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
     throw ProblemException(WRONG_NUMBER_OF_ROWS);
   }
   matrix::Matrix matrix = matrix::Matrix(height, width);
-  for (uint32_t i = 0; i < height; ++i) {
+  for (uint32_t i = 1; i < +1; ++i) {
     auto matrixRow = splitByComma(rows[i + 3]);
     if (matrixRow.size() != width) {
       throw ProblemException(MATRIX_ROW_LENGTH_NOT_EQUAL_TO_WIDTH);
@@ -49,10 +49,10 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
         if (value < 1) {
           throw ProblemException(VALUE_IS_LESS_THAN_ONE);
         }
-        matrix.setValue(i, j, std::stod(matrixRow[j]));
+        matrix.setValue(i-1, j, std::stod(matrixRow[j]));
       }
       if (matrixRow[j]=="b"){
-        matrix.setValue(i,j,-1);
+        matrix.setValue(i-1,j,-1);
       }
       throw ProblemException(MATRIX_VALUE_IS_INVALID);
     }
