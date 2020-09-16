@@ -30,7 +30,7 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
     throw ProblemException(MATRIX_HEIGHT_AND_WIDTH_ARE_NOT_INTEGERS);
   }
   uint32_t height = std::stol(matrixSizes[0]);
-  uint32_t width = std::stol(matrixSizes[0]);
+  uint32_t width = std::stol(matrixSizes[1]);
   if (height == 0 || width == 0) {
     throw ProblemException(HEIGHT_OR_WIDTH_IS_ZERO);
   }
@@ -39,7 +39,7 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
   }
   matrix::Matrix matrix = matrix::Matrix(height, width);
   for (uint32_t i = 1; i < height + 1; ++i) {
-    auto matrixRow = splitByComma(rows[i + 3]);
+    auto matrixRow = splitByComma(rows[i]);
     if (matrixRow.size() != width) {
       throw ProblemException(MATRIX_ROW_LENGTH_NOT_EQUAL_TO_WIDTH);
     }
