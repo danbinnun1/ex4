@@ -5,12 +5,10 @@
 namespace server_side {
 class FindGraphPath : public Problem {
 protected:
-  FindGraphPathInfo info;
+  FindGraphPathInfo m_info;
 
 public:
-  FindGraphPath(const Matrix matrix, const uint32_t startRow,
-                const uint32_t startCol, const uint32_t endRow,
-                const uint32_t endCol);
+  FindGraphPath(const FindGraphPathInfo& info);
   virtual ~FindGraphPath() = default;
   std::unique_ptr<Solution> solve() const override;
   virtual std::unique_ptr<Solution> solveProblem() const = 0;

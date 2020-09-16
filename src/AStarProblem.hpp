@@ -7,5 +7,6 @@ class AStarProblem : public FindGraphPath {
 
 public:
   std::unique_ptr<Solution> solveProblem() const override;
+  AStarProblem(const FindGraphPathInfo& info);
 };
 } // namespace server_side

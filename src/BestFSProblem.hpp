@@ -7,5 +7,6 @@ class BestFSProblem : public FindGraphPath {
 
 public:
   std::unique_ptr<Solution> solveProblem() const override;
+  BestFSProblem(const FindGraphPathInfo& info);
 };
 } // namespace server_side

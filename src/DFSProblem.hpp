@@ -8,5 +8,6 @@ class DFSProblem : public FindGraphPath {
 
 public:
   std::unique_ptr<Solution> solveProblem() const override;
+  DFSProblem(const FindGraphPathInfo& info);
 };
 } // namespace server_side

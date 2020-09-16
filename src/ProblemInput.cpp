@@ -1,5 +1,11 @@
 #include "ProblemInput.hpp"
+#include "AStarProblem.hpp"
+#include "BFSProblem.hpp"
+#include "BestFSProblem.hpp"
+#include "DFSProblem.hpp"
 #include "ErrorCode.hpp"
+#include "FindGraphPathInfo.hpp"
+#include "MatrixCreate.hpp"
 #include "ProblemException.hpp"
 #include <regex>
 
@@ -40,8 +46,21 @@ void server_side::ProblemInput::addRow(const std::string &row) {
   m_inputRows.push_back(row);
 }
 
-//std::unique_ptr<server_side::Problem> server_side::ProblemInput::parse() const {
-//if (m_problem == "find-graph-path") {
-      
-//}
-//}
+std::unique_ptr<server_side::Problem> server_side::ProblemInput::parse() const {
+  if (m_problem == "find-graph-path") {
+    FindGraphPathInfo info = parseMatrix(m_inputRows);
+
+    if (m_algorithm == "A*") {
+      return std::make_unique<AStarProblem>(info);
+    }
+    if (m_algorithm == "DFS") {
+      return std::make_unique<DFSProblem>(info);
+    }
+    if (m_algorithm == "BFS") {
+      return std::make_unique<BFSProblem>(info);
+    }
+    if (m_algorithm == "BestFS") {
+      return std::make_unique<BestFSProblem>(info);
+    }
+  }
+}

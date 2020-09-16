@@ -10,9 +10,9 @@
 using namespace server_side;
 
 std::unique_ptr<Solution> DFSProblem::solveProblem() const{
-    matrix::Matrix visited = matrix::Matrix(info.getMatrix().getHeight() , info.getMatrix().getWidth());
+    matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight() , m_info.getMatrix().getWidth());
     std::stack<GraphPathService> stack;
-    visited.setValue(info.getStartCol(), info.getStartRow(), 1); 
+    visited.setValue(m_info.getStartCol(), m_info.getStartRow(), 1); 
     stack.push(GraphPathService()); 
   
     while (!stack.empty()) 
@@ -20,14 +20,14 @@ std::unique_ptr<Solution> DFSProblem::solveProblem() const{
         GraphPathService path = stack.top(); 
         stack.pop(); 
 
-        GraphElement s = path.applyPath(info);
+        GraphElement s = path.applyPath(m_info);
         
-        if(s.getRow() == info.getEndRow() && s.getCol() == info.getEndCol()){
+        if(s.getRow() == m_info.getEndRow() && s.getCol() == m_info.getEndCol()){
             return std::make_unique<GraphPath>("DFS", path.getPath(), path.getPathWeight());
         }
         if(s.getRow() != 0){
             if(visited(s.getCol(), s.getRow() - 1) != 1){
-                double weight = info.getMatrix()(s.getCol(), s.getRow() - 1);
+                double weight = m_info.getMatrix()(s.getCol(), s.getRow() - 1);
                 visited.setValue(s.getCol(), s.getRow() - 1, 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
@@ -38,7 +38,7 @@ std::unique_ptr<Solution> DFSProblem::solveProblem() const{
         }
         if(s.getCol() != 0){
             if(visited(s.getCol() - 1, s.getRow()) != 1){
-                double weight = info.getMatrix()(s.getCol() - 1, s.getRow());
+                double weight = m_info.getMatrix()(s.getCol() - 1, s.getRow());
                 visited.setValue(s.getCol() - 1, s.getRow(), 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
@@ -47,9 +47,9 @@ std::unique_ptr<Solution> DFSProblem::solveProblem() const{
                 }
             }
         }
-        if(s.getRow() != info.getMatrix().getHeight() - 1){
+        if(s.getRow() != m_info.getMatrix().getHeight() - 1){
             if(visited(s.getCol(), s.getRow() + 1) != 1){
-                double weight = info.getMatrix()(s.getCol(), s.getRow() + 1);
+                double weight = m_info.getMatrix()(s.getCol(), s.getRow() + 1);
                 visited.setValue(s.getCol(), s.getRow() + 1, 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
@@ -58,9 +58,9 @@ std::unique_ptr<Solution> DFSProblem::solveProblem() const{
                 }
             }
         }
-        if(s.getRow() != info.getMatrix().getWidth() - 1){
+        if(s.getRow() != m_info.getMatrix().getWidth() - 1){
             if(visited(s.getCol() + 1, s.getRow()) != 1){
-                double weight = info.getMatrix()(s.getCol() + 1, s.getRow());
+                double weight = m_info.getMatrix()(s.getCol() + 1, s.getRow());
                 visited.setValue(s.getCol() + 1, s.getRow(), 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
@@ -74,3 +74,4 @@ std::unique_ptr<Solution> DFSProblem::solveProblem() const{
     // If DFS is complete without visiting target 
     throw ProblemException(ErrorCode::NO_PATH);
 }
+DFSProblem::DFSProblem(const FindGraphPathInfo& info): FindGraphPath(info){}
