@@ -32,7 +32,7 @@ server_side::ProblemInput::ProblemInput(const std::string &problemRequest) {
     m_algorithm = "BFS";
   } else {
     m_algorithm = requestWords[2];
-    if (m_algorithm != "DFS" && m_algorithm != "DFS" &&
+    if (m_algorithm != "DFS" && m_algorithm != "BFS" &&
         m_algorithm != "BestFS" && m_algorithm != "A*") {
       throw ProblemException(INVALID_ALGORITHM_NAME);
     }

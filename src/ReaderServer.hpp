@@ -15,7 +15,7 @@ namespace server_side
         uint32_t m_currentClients;
         //time to wait for the client to send
         long m_waitTime;
-        void serveClient(const int connfd, const std::string& problem, const std::string& alg);
+        void serveClient(const int connfd);
     public:
         void open(const int port) override;
         ReaderServer(const std::string& end, uint32_t maxClients, long waitTime);

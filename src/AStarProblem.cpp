@@ -9,6 +9,7 @@
 using namespace server_side;
 
 std::unique_ptr<Solution> AStarProblem::solveProblem() const{
+
     matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight() , m_info.getMatrix().getWidth());
     std::priority_queue<GraphPathService, std::vector<GraphPathService>, LargerThanByPathWeight> queue;
     visited.setValue(m_info.getStartCol(), m_info.getStartRow(), 1); 
