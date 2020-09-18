@@ -42,7 +42,7 @@ void timer(const long waitTime, bool &finished, bool &timeoutPassed) {
 }
 
 void readMessage(bool &finished, int connfd, char *buffer) {
-  read(connfd, buffer, sizeof(buffer));
+  read(connfd, buffer, 1024);
   finished = true;
 }
 void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
@@ -103,6 +103,7 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     //shutdown(connfd, SHUT_WR);
   }
   close(connfd);
+  --m_currentClients;
 }
 
 void server_side::ReaderServer::open(const int port) {
@@ -134,6 +135,8 @@ void server_side::ReaderServer::open(const int port) {
       std::string response = getStructure(SERVER_IS_FULL, "");
       send(clientfd, response.data(), response.size(), 0);
       close(clientfd);
+      --m_currentClients;
+      std::cout<<"client could not join, server is full."<<std::endl;
     } else {
       threads.emplace_back(
           std::thread(&ReaderServer::serveClient, this, clientfd));
