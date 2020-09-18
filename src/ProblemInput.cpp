@@ -47,20 +47,17 @@ void server_side::ProblemInput::addRow(const std::string &row) {
 }
 
 std::unique_ptr<server_side::Problem> server_side::ProblemInput::parse() const {
-  if (m_problem == "find-graph-path") {
-    FindGraphPathInfo info = parseMatrix(m_inputRows);
+  FindGraphPathInfo info = parseMatrix(m_inputRows);
 
-    if (m_algorithm == "A*") {
-      return std::make_unique<AStarProblem>(info);
-    }
-    if (m_algorithm == "DFS") {
-      return std::make_unique<DFSProblem>(info);
-    }
-    if (m_algorithm == "BFS") {
-      return std::make_unique<BFSProblem>(info);
-    }
-    if (m_algorithm == "BestFS") {
-      return std::make_unique<BestFSProblem>(info);
-    }
+  if (m_algorithm == "A*") {
+    return std::make_unique<AStarProblem>(info);
+  }
+  if (m_algorithm == "DFS") {
+    return std::make_unique<DFSProblem>(info);
+  }
+  if (m_algorithm == "BFS") {
+    return std::make_unique<BFSProblem>(info);
+  } else {
+    return std::make_unique<BestFSProblem>(info);
   }
 }

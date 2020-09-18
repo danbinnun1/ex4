@@ -1,5 +1,10 @@
 #include "ReaderServer.hpp"
+#include "ErrorCode.hpp"
+#include "MessageStructure.hpp"
+#include "ProblemException.hpp"
 #include "ProblemInput.hpp"
+#include "ServerException.hpp"
+#include <arpa/inet.h>
 #include <chrono>
 #include <cstring>
 #include <memory>
@@ -8,7 +13,6 @@
 #include <thread>
 #include <threads.h>
 #include <unistd.h>
-#include <arpa/inet.h>
 
 using namespace std::chrono;
 
@@ -62,55 +66,71 @@ void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
 }
 
 void server_side::ReaderServer::serveClient(const int connfd) {
-  char buffer[1024] = {0};
-  bool recievedMessage;
-  readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
-  if (!recievedMessage) {
-    return;
-  }
-  std::unique_ptr<ProblemInput> input = std::make_unique<ProblemInput>(buffer);
-  bool clientFinished = false;
-  while (!clientFinished) {
-    memset(buffer, 0, sizeof(buffer));
+  try {
+    char buffer[1024] = {0};
+    bool recievedMessage;
     readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
     if (!recievedMessage) {
       return;
     }
-    if (buffer == m_end) {
-      clientFinished = true;
-    } else {
-      input->addRow(buffer);
+    std::unique_ptr<ProblemInput> input =
+        std::make_unique<ProblemInput>(buffer);
+    auto requestApproval=getStructure(NO_ERROR, "");
+    send(connfd,requestApproval.data(), requestApproval.size(), 0);
+    bool clientFinished = false;
+    while (!clientFinished) {
+      memset(buffer, 0, sizeof(buffer));
+      readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
+      if (!recievedMessage) {
+        return;
+      }
+      if (buffer == m_end) {
+        clientFinished = true;
+      } else {
+        input->addRow(buffer);
+      }
     }
+    std::unique_ptr<Problem> p = input->parse();
+    std::unique_ptr<Solution> s = p->solve();
+    std::string solution = s->toString();
+    auto message=getStructure(NO_ERROR, solution);
+    send(connfd, message.data(), message.size(), 0);
+  } catch (const ProblemException &e) {
+    auto message=getStructure(e.getCode(), "");
+    send(connfd, message.data(), message.size(), 0);
   }
-  std::unique_ptr<Problem> p = input->parse();
-  std::unique_ptr<Solution> s = p->solve();
-  std::string message=s->toString();
-  send(connfd,message.data(), message.size(),0);
+  close(connfd);
 }
 
-void open(const int port){
+void server_side::ReaderServer::open(const int port) {
   struct sockaddr_in address;
   int addrlen = sizeof(address);
   int server_fd;
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-    perror("socket failed");
-    exit(EXIT_FAILURE);
+    throw ServerException("socket failed.");
   }
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(8087);
+  address.sin_port = htons(port);
   if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-    perror("bind failed");
-    exit(EXIT_FAILURE);
+    throw ServerException("bind failed.");
   }
-  if (listen(server_fd, 3) < 0) {
-    perror("listen");
-    exit(EXIT_FAILURE);
+  if (listen(server_fd, 65535) < 0) {
+    throw ServerException("listen failed.");
   }
-  int clientfd;
-  if ((clientfd = accept(server_fd, (struct sockaddr *)&address,
+  while (true) {
+    int clientfd;
+    if ((clientfd = accept(server_fd, (struct sockaddr *)&address,
                            (socklen_t *)&addrlen)) < 0) {
-    perror("accept");
-    exit(EXIT_FAILURE);
+      throw ServerException("accept client failed.");
+    }
+    ++m_currentClients;
+    if (m_currentClients > m_maxClients) {
+      std::string response = getStructure(SERVER_IS_FULL, "");
+      send(clientfd, response.data(), response.size(), 0);
+      close(clientfd);
+    } else {
+      std::thread serveClient(clientfd);
+    }
   }
 }

@@ -10,12 +10,6 @@
 using namespace server_side;
 
 std::unique_ptr<Solution> BestFSProblem::solveProblem() const{
-    matrix::Matrix u=m_info.getMatrix();
-    for (int i=0;i<u.getHeight();++i){
-        for (int j=0;j<u.getWidth();++j){
-        std::cout<<u(i,j)<<std::endl;
-    }   
-    }
     matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight() , m_info.getMatrix().getWidth());
     std::priority_queue<GraphPathService, std::vector<GraphPathService>, LargerThanByLastWeight> queue;
     std::cout<<1<<std::endl;
