@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <chrono>
 #include <cstring>
+#include <iostream>
 #include <memory>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -18,8 +19,8 @@ using namespace std::chrono;
 
 server_side::ReaderServer::ReaderServer(const std::string &end,
                                         uint32_t maxClients, long waitTime)
-    : m_end(end), m_maxClients(maxClients), m_waitTime(waitTime),
-      m_currentClients(0) {}
+    : m_end(end), m_maxClients(maxClients), m_currentClients(0),
+      m_waitTime(waitTime) {}
 
 void timer(const long waitTime, bool &finished, bool &timeoutPassed) {
   long start =
@@ -73,10 +74,11 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     if (!recievedMessage) {
       return;
     }
+    std::cout << "client sent message:" << buffer << std::endl;
     std::unique_ptr<ProblemInput> input =
         std::make_unique<ProblemInput>(buffer);
-    auto requestApproval=getStructure(NO_ERROR, "");
-    send(connfd,requestApproval.data(), requestApproval.size(), 0);
+    auto requestApproval = getStructure(NO_ERROR, "");
+    send(connfd, requestApproval.data(), requestApproval.size(), 0);
     bool clientFinished = false;
     while (!clientFinished) {
       memset(buffer, 0, sizeof(buffer));
@@ -93,11 +95,13 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     std::unique_ptr<Problem> p = input->parse();
     std::unique_ptr<Solution> s = p->solve();
     std::string solution = s->toString();
-    auto message=getStructure(NO_ERROR, solution);
+    auto message = getStructure(NO_ERROR, solution);
     send(connfd, message.data(), message.size(), 0);
   } catch (const ProblemException &e) {
-    auto message=getStructure(e.getCode(), "");
+    auto message = getStructure(e.getCode(), "");
+    std::cout << message << "y" << std::endl;
     send(connfd, message.data(), message.size(), 0);
+    shutdown(connfd, SHUT_WR);
   }
   close(connfd);
 }
@@ -118,19 +122,22 @@ void server_side::ReaderServer::open(const int port) {
   if (listen(server_fd, 65535) < 0) {
     throw ServerException("listen failed.");
   }
+  std::vector<std::thread> threads = {};
   while (true) {
     int clientfd;
     if ((clientfd = accept(server_fd, (struct sockaddr *)&address,
                            (socklen_t *)&addrlen)) < 0) {
       throw ServerException("accept client failed.");
     }
+    std::cout << "client connected" << std::endl;
     ++m_currentClients;
     if (m_currentClients > m_maxClients) {
       std::string response = getStructure(SERVER_IS_FULL, "");
       send(clientfd, response.data(), response.size(), 0);
       close(clientfd);
     } else {
-      std::thread serveClient(clientfd);
+      threads.emplace_back(
+          std::thread(&ReaderServer::serveClient, this, clientfd));
     }
   }
 }
