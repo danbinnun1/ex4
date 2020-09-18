@@ -60,13 +60,13 @@ void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
     readClinetMessage.join();
     recievedMessage = false;
   } else {
-    close(connfd);
     readClinetMessage.join();
     recievedMessage = true;
   }
 }
 
 void server_side::ReaderServer::serveClient(const int connfd) {
+
   try {
     char buffer[1024] = {0};
     bool recievedMessage;
@@ -99,9 +99,8 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     send(connfd, message.data(), message.size(), 0);
   } catch (const ProblemException &e) {
     auto message = getStructure(e.getCode(), "");
-    std::cout << message << "y" << std::endl;
     send(connfd, message.data(), message.size(), 0);
-    shutdown(connfd, SHUT_WR);
+    //shutdown(connfd, SHUT_WR);
   }
   close(connfd);
 }
@@ -129,7 +128,7 @@ void server_side::ReaderServer::open(const int port) {
                            (socklen_t *)&addrlen)) < 0) {
       throw ServerException("accept client failed.");
     }
-    std::cout << "client connected" << std::endl;
+    std::cout << "client connected." << std::endl;
     ++m_currentClients;
     if (m_currentClients > m_maxClients) {
       std::string response = getStructure(SERVER_IS_FULL, "");
