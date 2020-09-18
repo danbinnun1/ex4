@@ -7,16 +7,7 @@ namespace server_side{
     private:
         std::string m_error;
     public:
-        ServerException(std::string);
+        ServerException(const std::string);
         const char* what() const noexcept override;
     };
-    
-    ServerException::ServerException(/* args */)
-    {
-    }
-    
-    ServerException::~ServerException()
-    {
-    }
-    
 }

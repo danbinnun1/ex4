@@ -107,7 +107,8 @@ void open(const int port){
     perror("listen");
     exit(EXIT_FAILURE);
   }
-  if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
+  int clientfd;
+  if ((clientfd = accept(server_fd, (struct sockaddr *)&address,
                            (socklen_t *)&addrlen)) < 0) {
     perror("accept");
     exit(EXIT_FAILURE);
