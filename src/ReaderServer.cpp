@@ -74,8 +74,8 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     bool recievedMessage;
     readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
     if (!recievedMessage) {
+    --m_currentClients;
       return;
-      --m_currentClients;
     }
     std::cout << "client sent message:" << buffer << std::endl;
     std::unique_ptr<ProblemInput> input =
