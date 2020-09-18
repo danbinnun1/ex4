@@ -12,7 +12,7 @@ std::unique_ptr<Solution> AStarProblem::solveProblem() const{
 
     matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight() , m_info.getMatrix().getWidth());
     std::priority_queue<GraphPathService, std::vector<GraphPathService>, LargerThanByPathWeight> queue;
-    visited.setValue(m_info.getStartCol(), m_info.getStartRow(), 1); 
+    visited.setValue(m_info.getStartRow(), m_info.getStartCol(), 1); 
     queue.push(GraphPathService()); 
   
     while (!queue.empty()) 
@@ -26,9 +26,9 @@ std::unique_ptr<Solution> AStarProblem::solveProblem() const{
             return std::make_unique<GraphPath>("A*", path.getPath(), path.getPathWeight());
         }
         if(s.getRow() != 0){
-            if(visited(s.getCol(), s.getRow() - 1) != 1){
-                double weight = m_info.getMatrix()(s.getCol(), s.getRow() - 1);
-                visited.setValue(s.getCol(), s.getRow() - 1, 1);
+            if(visited(s.getRow() - 1, s.getCol()) != 1){
+                double weight = m_info.getMatrix()(s.getRow() - 1, s.getCol());
+                visited.setValue(s.getRow() - 1, s.getCol(), 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
                     newPath.addDirection(Direction::up, weight);
@@ -37,9 +37,9 @@ std::unique_ptr<Solution> AStarProblem::solveProblem() const{
             }
         }
         if(s.getCol() != 0){
-            if(visited(s.getCol() - 1, s.getRow()) != 1){
-                double weight = m_info.getMatrix()(s.getCol() - 1, s.getRow());
-                visited.setValue(s.getCol() - 1, s.getRow(), 1);
+            if(visited(s.getRow(), s.getCol() - 1 != 1)){
+                double weight = m_info.getMatrix()(s.getRow(), s.getCol() - 1);
+                visited.setValue(s.getRow(), s.getCol() - 1, 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
                     newPath.addDirection(Direction::left, weight);
@@ -48,9 +48,9 @@ std::unique_ptr<Solution> AStarProblem::solveProblem() const{
             }
         }
         if(s.getRow() != m_info.getMatrix().getHeight() - 1){
-            if(visited(s.getCol(), s.getRow() + 1) != 1){
-                double weight = m_info.getMatrix()(s.getCol(), s.getRow() + 1);
-                visited.setValue(s.getCol(), s.getRow() + 1, 1);
+            if(visited(s.getRow() + 1, s.getCol()) != 1){
+                double weight = m_info.getMatrix()(s.getRow() + 1, s.getCol());
+                visited.setValue(s.getRow() + 1, s.getCol(), 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
                     newPath.addDirection(Direction::down, weight);
@@ -58,10 +58,10 @@ std::unique_ptr<Solution> AStarProblem::solveProblem() const{
                 }
             }
         }
-        if(s.getRow() != m_info.getMatrix().getWidth() - 1){
-            if(visited(s.getCol() + 1, s.getRow()) != 1){
-                double weight = m_info.getMatrix()(s.getCol() + 1, s.getRow());
-                visited.setValue(s.getCol() + 1, s.getRow(), 1);
+        if(s.getCol() != m_info.getMatrix().getWidth() - 1){
+            if(visited(s.getRow(), s.getCol() + 1) != 1){
+                double weight = m_info.getMatrix()(s.getRow(), s.getCol() + 1);
+                visited.setValue(s.getRow(), s.getCol() + 1, 1);
                 if(weight != -1){
                     GraphPathService newPath(path);
                     newPath.addDirection(Direction::right, weight);
