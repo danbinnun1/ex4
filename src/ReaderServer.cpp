@@ -59,6 +59,8 @@ void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
     close(connfd);
     readClinetMessage.join();
     recievedMessage = false;
+    std::cout << "closed client connection because timeout passes."
+              << std::endl;
   } else {
     readClinetMessage.join();
     recievedMessage = true;
@@ -73,6 +75,7 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
     if (!recievedMessage) {
       return;
+      --m_currentClients;
     }
     std::cout << "client sent message:" << buffer << std::endl;
     std::unique_ptr<ProblemInput> input =
@@ -97,10 +100,13 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     std::string solution = s->toString();
     auto message = getStructure(NO_ERROR, solution);
     send(connfd, message.data(), message.size(), 0);
+    std::cout << "client finished and got message back." << std::endl;
   } catch (const ProblemException &e) {
     auto message = getStructure(e.getCode(), "");
     send(connfd, message.data(), message.size(), 0);
-    //shutdown(connfd, SHUT_WR);
+    std::cout << "client finished and got message back." << std::endl;
+
+    // shutdown(connfd, SHUT_WR);
   }
   close(connfd);
   --m_currentClients;
@@ -136,10 +142,12 @@ void server_side::ReaderServer::open(const int port) {
       send(clientfd, response.data(), response.size(), 0);
       close(clientfd);
       --m_currentClients;
-      std::cout<<"client could not join, server is full."<<std::endl;
+      std::cout << "client could not join, server is full." << std::endl;
     } else {
       threads.emplace_back(
           std::thread(&ReaderServer::serveClient, this, clientfd));
     }
+    std::cout << "clients connected: " << m_currentClients
+              << ". max capacity: " << m_maxClients << std::endl;
   }
 }
