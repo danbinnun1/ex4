@@ -74,7 +74,7 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     bool recievedMessage;
     readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
     if (!recievedMessage) {
-    --m_currentClients;
+      --m_currentClients;
       return;
     }
     std::cout << "client sent message:" << buffer << std::endl;
@@ -87,6 +87,7 @@ void server_side::ReaderServer::serveClient(const int connfd) {
       memset(buffer, 0, sizeof(buffer));
       readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
       if (!recievedMessage) {
+        --m_currentClients;
         return;
       }
       if (buffer == m_end) {
