@@ -2,13 +2,14 @@
 #include "Direction.hpp"
 #include <regex>
 #include "split.hpp"
+
 server_side::GraphPath::GraphPath(const std::string &algorithm,
                                   const std::vector<Direction> &path,
                                   double pathWeight)
     : m_path(path), m_algorithm(algorithm), m_pathWeight(pathWeight) {}
 std::string server_side::GraphPath::toString() const {
   std::string s = "";
-  s += m_pathWeight;
+  s += std::to_string(m_pathWeight);
   s += ",";
   s += m_algorithm;
   for (auto const &direction : m_path) {

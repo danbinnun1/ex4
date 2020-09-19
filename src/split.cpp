@@ -15,10 +15,13 @@ std::vector<std::string> splitByComma(const std::string &str) {
 std::vector<std::string> splitByRow(const std::string &str) {
   std::vector<std::string> rows;
   std::regex rx("[^\r\n]+\r\n");
+  std::string enter="\r\n";
   std::sregex_iterator FormatedFileList(str.begin(), str.end(), rx), rxend;
 
   while (FormatedFileList != rxend) {
-    rows.push_back(FormatedFileList->str().c_str());
+    std::string newRow=FormatedFileList->str().c_str();
+    newRow.erase(newRow.size()-enter.size(), enter.size());
+    rows.push_back(newRow);
     ++FormatedFileList;
   }
   return rows;
