@@ -17,6 +17,12 @@
 
 using namespace std::chrono;
 
+inline bool ends_with(std::string const &value, std::string const &ending) {
+  if (ending.size() > value.size())
+    return false;
+  return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
 server_side::ReaderServer::ReaderServer(const std::string &end,
                                         uint32_t maxClients, long waitTime)
     : m_end(end), m_maxClients(maxClients), m_currentClients(0),
@@ -90,10 +96,13 @@ void server_side::ReaderServer::serveClient(const int connfd) {
         --m_currentClients;
         return;
       }
-      if (buffer == m_end) {
+      std::string row=std::string(buffer);
+      std::string enter="\r\n";
+      if (ends_with(row,m_end+enter)) {
+        input->addRow(row.substr(0, row.size()-m_end.size()-enter.size()));
         clientFinished = true;
       } else {
-        input->addRow(buffer);
+        input->addRow(row);
       }
     }
     std::unique_ptr<Problem> p = input->parse();

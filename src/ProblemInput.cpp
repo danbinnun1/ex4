@@ -8,6 +8,7 @@
 #include "MatrixCreate.hpp"
 #include "ProblemException.hpp"
 #include <regex>
+#include "split.hpp"
 
 server_side::ProblemInput::ProblemInput(const std::string &problemRequest) {
   std::vector<std::string> requestWords = {};
@@ -43,11 +44,12 @@ server_side::ProblemInput::ProblemInput(const std::string &problemRequest) {
 }
 
 void server_side::ProblemInput::addRow(const std::string &row) {
-  m_inputRows.push_back(row);
+  m_input += row;
 }
 
 std::unique_ptr<server_side::Problem> server_side::ProblemInput::parse() const {
-  FindGraphPathInfo info = parseMatrix(m_inputRows);
+  auto rows=splitByRow(m_input);
+  FindGraphPathInfo info = parseMatrix(rows);
 
   if (m_algorithm == "A*") {
     return std::make_unique<AStarProblem>(info);

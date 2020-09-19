@@ -5,7 +5,7 @@
 namespace server_side {
 class ProblemInput {
 private:
-  std::vector<std::string> m_inputRows;
+  std::string m_input;
   std::string m_problem;
   std::string m_algorithm;
 
