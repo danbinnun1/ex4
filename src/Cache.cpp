@@ -9,6 +9,11 @@ void server_side::createCache() {
     throw std::runtime_error("could not create cache");
 }
 
+bool server_side::cacheExists() {
+  struct stat buffer;
+  return stat("cache", &buffer) != -1 && S_ISDIR(buffer.st_mode);
+}
+
 std::string server_side::searchByHash(const uint32_t inputHash) {
   return readFileContent("cache/"+std::to_string(inputHash));
 }
