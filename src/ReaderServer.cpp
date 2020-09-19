@@ -97,9 +97,13 @@ void server_side::ReaderServer::serveClient(const int connfd) {
         return;
       }
       std::string row=std::string(buffer);
+
       std::string enter="\r\n";
       if (ends_with(row,m_end+enter)) {
-        input->addRow(row.substr(0, row.size()-m_end.size()-enter.size()));
+        std::string h=row.substr(0, row.size()-m_end.size()-enter.size());
+                    std::cout<<h<<"klkl"<<std::endl;
+
+        input->addRow(h);
         clientFinished = true;
       } else {
         input->addRow(row);
