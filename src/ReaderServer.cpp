@@ -48,7 +48,7 @@ void timer(const long waitTime, bool &finished, bool &timeoutPassed) {
 }
 
 void readMessage(bool &finished, int connfd, char *buffer) {
-  read(connfd, buffer, 1024);
+  while (read(connfd, buffer, 1024)==0);
   finished = true;
 }
 void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
@@ -57,9 +57,10 @@ void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
   bool timeoutPassed = false;
   std::thread readClinetMessage(readMessage, std::ref(finished), connfd,
                                 buffer);
-  std::thread countTime(timer, waitTime, std::ref(finished),
+  timer(waitTime, std::ref(finished),
                         std::ref(timeoutPassed));
-  countTime.join();
+  //countTime.join();
+  //std::cout<<"uuupo"<<std::endl;
   if (timeoutPassed) {
     shutdown(connfd, SHUT_RD);
     close(connfd);
@@ -91,7 +92,9 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     bool clientFinished = false;
     while (!clientFinished) {
       memset(buffer, 0, sizeof(buffer));
+      std::cout<<"uuupo"<<std::endl;
       readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
+      std::cout<<"uuu"<<std::endl;
       if (!recievedMessage) {
         --m_currentClients;
         return;
