@@ -79,3 +79,6 @@ std::unique_ptr<Solution> BestFSProblem::solveProblem() const{
 }
 
 BestFSProblem::BestFSProblem(const FindGraphPathInfo& info):FindGraphPath(info){}
+  std::string BestFSProblem::algorithmName() const{
+      return "BestFS";
+}

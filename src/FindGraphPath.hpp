@@ -12,6 +12,6 @@ public:
   virtual ~FindGraphPath() = default;
   std::unique_ptr<Solution> solve() const override;
   virtual std::unique_ptr<Solution> solveProblem() const = 0;
-
+  virtual std::string algorithmName() const = 0;
 };
 } // namespace server_side

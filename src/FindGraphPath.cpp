@@ -16,12 +16,12 @@ std::unique_ptr<Solution> FindGraphPath::solve() const {
     createCache();
   }
   uint32_t hashCode = m_info.getHash();
-  if (solutionInCache(hashCode)) {
-    return std::make_unique<GraphPath>(searchByHash(hashCode));
+  if (solutionInCache(algorithmName()+ std::to_string(hashCode))) {
+    return std::make_unique<GraphPath>(searchByHash(algorithmName()+ std::to_string(hashCode)));
     std::cout<<"test"<<std::endl;
   }
   std::unique_ptr<Solution> solution = solveProblem();
-  insert(hashCode, solution.get()->toString());
+  insert(algorithmName()+ std::to_string(hashCode), solution.get()->toString());
   return solution;
 }
 
