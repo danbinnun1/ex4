@@ -11,3 +11,17 @@ std::vector<std::string> splitByComma(const std::string &str) {
   }
   return result;
 }
+
+std::vector<std::string> splitByRow(std::string str) {
+  str+="\r\n";
+  std::vector<std::string> rows;
+  size_t pos = 0;
+  std::string token;
+  std::string delimiter="\r\n";
+  while ((pos = str.find(delimiter)) != std::string::npos) {
+    token = str.substr(0, pos);
+    rows.push_back(token);
+    str.erase(0, (pos + delimiter.length()));
+  }
+  return rows;
+}

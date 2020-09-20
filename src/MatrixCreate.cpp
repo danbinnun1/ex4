@@ -2,6 +2,7 @@
 #include "ProblemException.hpp"
 #include "split.hpp"
 #include <sstream>
+#include <iostream>
 
 bool is_double(std::string const &str) {
   auto result = double();
@@ -19,6 +20,9 @@ bool is_number(const std::string &s) {
 }
 server_side::FindGraphPathInfo
 server_side::parseMatrix(const std::vector<std::string> &rows) {
+  for (auto u:rows){
+    std::cout<<"o"<<u<<"p"<<std::endl;
+  }
   if (rows.size() == 0) {
     throw ProblemException(NO_MATRIX_SENT);
   }
@@ -35,6 +39,7 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
     throw ProblemException(HEIGHT_OR_WIDTH_IS_ZERO);
   }
   if (rows.size() != height + 3) {
+    std::cout<<height<<"k"<<rows.size()<<std::endl;
     throw ProblemException(WRONG_NUMBER_OF_ROWS);
   }
   matrix::Matrix matrix = matrix::Matrix(height, width);
