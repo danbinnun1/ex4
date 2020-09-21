@@ -7,10 +7,13 @@
 #include "FindGraphPathInfo.hpp"
 #include "MatrixCreate.hpp"
 #include "ProblemException.hpp"
-#include <regex>
 #include "split.hpp"
+#include <regex>
 
-server_side::ProblemInput::ProblemInput(const std::string &problemRequest) {
+server_side::ProblemInput::ProblemInput(std::string problemRequest) {
+  transform(problemRequest.begin(), problemRequest.end(),
+            problemRequest.begin(), ::tolower);
+
   std::vector<std::string> requestWords = {};
   std::regex rgx("\\s+");
   std::sregex_token_iterator iter(problemRequest.begin(), problemRequest.end(),
@@ -30,11 +33,11 @@ server_side::ProblemInput::ProblemInput(const std::string &problemRequest) {
     throw ProblemException(INVALID_PROBLEM_NAME);
   }
   if (requestWords.size() == 2) {
-    m_algorithm = "BFS";
+    m_algorithm = "bfs";
   } else {
     m_algorithm = requestWords[2];
-    if (m_algorithm != "DFS" && m_algorithm != "BFS" &&
-        m_algorithm != "BestFS" && m_algorithm != "A*") {
+    if (m_algorithm != "dfs" && m_algorithm != "bfs" &&
+        m_algorithm != "bestfs" && m_algorithm != "a*") {
       throw ProblemException(INVALID_ALGORITHM_NAME);
     }
     if (requestWords.size() > 3) {
@@ -49,16 +52,16 @@ void server_side::ProblemInput::addRow(const std::string &row) {
 
 std::unique_ptr<server_side::Problem> server_side::ProblemInput::parse() const {
 
-  auto rows=splitByRow(m_input);
+  auto rows = splitByRow(m_input);
   FindGraphPathInfo info = parseMatrix(rows);
 
-  if (m_algorithm == "A*") {
+  if (m_algorithm == "a*") {
     return std::make_unique<AStarProblem>(info);
   }
-  if (m_algorithm == "DFS") {
+  if (m_algorithm == "dfs") {
     return std::make_unique<DFSProblem>(info);
   }
-  if (m_algorithm == "BFS") {
+  if (m_algorithm == "bfs") {
     return std::make_unique<BFSProblem>(info);
   } else {
     return std::make_unique<BestFSProblem>(info);

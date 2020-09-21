@@ -10,7 +10,7 @@ private:
   std::string m_algorithm;
 
 public:
-  ProblemInput(const std::string &problemRequest);
+  ProblemInput(std::string problemRequest);
   std::unique_ptr<Problem> parse() const;
   void addRow(const std::string &row);
 };
