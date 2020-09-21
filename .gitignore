@@ -31,6 +31,5 @@
 *.out
 *.app
 
-src/main.cpp
 .vscode
 build
