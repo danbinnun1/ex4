@@ -92,9 +92,7 @@ void server_side::ReaderServer::serveClient(const int connfd) {
     bool clientFinished = false;
     while (!clientFinished) {
       memset(buffer, 0, sizeof(buffer));
-      std::cout<<"uuupo"<<std::endl;
       readMessageWithTimeout(connfd, buffer, recievedMessage, m_waitTime);
-      std::cout<<"uuu"<<std::endl;
       if (!recievedMessage) {
         --m_currentClients;
         return;
@@ -104,8 +102,6 @@ void server_side::ReaderServer::serveClient(const int connfd) {
       std::string enter="\r\n";
       if (ends_with(row,m_end+enter)) {
         std::string h=row.substr(0, row.size()-m_end.size()-enter.size());
-                    std::cout<<h<<"klkl"<<std::endl;
-
         input->addRow(h);
         clientFinished = true;
       } else {

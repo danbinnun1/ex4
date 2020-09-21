@@ -9,7 +9,6 @@
 #include "ProblemException.hpp"
 #include <regex>
 #include "split.hpp"
-#include <iostream>
 
 server_side::ProblemInput::ProblemInput(const std::string &problemRequest) {
   std::vector<std::string> requestWords = {};
@@ -49,12 +48,8 @@ void server_side::ProblemInput::addRow(const std::string &row) {
 }
 
 std::unique_ptr<server_side::Problem> server_side::ProblemInput::parse() const {
-    std::cout<<"fff"<<m_input<<"fff"<<std::endl;
 
   auto rows=splitByRow(m_input);
-  for (auto d:rows){
-    std::cout<<d<<"m"<<std::endl;
-  }
   FindGraphPathInfo info = parseMatrix(rows);
 
   if (m_algorithm == "A*") {

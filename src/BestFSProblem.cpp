@@ -5,21 +5,17 @@
 #include <queue>
 #include "GraphElement.hpp"
 #include "GraphPathService.hpp"
-#include <iostream>
 #include "GraphPath.hpp"
 using namespace server_side;
 
 std::unique_ptr<Solution> BestFSProblem::solveProblem() const{
     matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight() , m_info.getMatrix().getWidth());
     std::priority_queue<GraphPathService, std::vector<GraphPathService>, LargerThanByLastWeight> queue;
-    std::cout<<1<<std::endl;
     visited.setValue(m_info.getStartRow(), m_info.getStartCol(), 1); 
     queue.push(GraphPathService()); 
   
     while (!queue.empty()) 
     { 
-            std::cout<<2<<std::endl;
-
         GraphPathService path = queue.top(); 
         queue.pop(); 
 

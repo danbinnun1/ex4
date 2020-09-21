@@ -7,7 +7,6 @@
 #include "FindGraphPathInfo.hpp"
 #include "GraphPath.hpp"
 #include "ProblemException.hpp"
-#include <iostream>
 
 using namespace server_side;
 
@@ -18,7 +17,6 @@ std::unique_ptr<Solution> FindGraphPath::solve() const {
   uint32_t hashCode = m_info.getHash();
   if (solutionInCache(algorithmName()+ std::to_string(hashCode))) {
     return std::make_unique<GraphPath>(searchByHash(algorithmName()+ std::to_string(hashCode)));
-    std::cout<<"test"<<std::endl;
   }
   std::unique_ptr<Solution> solution = solveProblem();
   insert(algorithmName()+ std::to_string(hashCode), solution.get()->toString());
