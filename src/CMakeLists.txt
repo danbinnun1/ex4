@@ -17,7 +17,7 @@ link_directories(${CMAKE_SOURCE_DIR}/matrix)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "./bin")
 
 find_package (Threads)
-add_executable(ex3.out main.cpp crc32.c Cache.cpp ReaderServer.cpp ServerException.cpp ProblemInput.cpp MessageStructure.cpp AStarProblem.cpp FindGraphPath.cpp BestFSProblem.cpp BFSProblem.cpp DFSProblem.cpp GraphPathService.cpp split.cpp GraphElement.cpp MatrixCreate.cpp matrix/Matrix.cpp matrix/MatrixException.cpp ProblemException.cpp FindGraphPathInfo.cpp GraphPath.cpp file_reading.cpp)
+add_executable(ex3.out main.cpp ProblemSolver.cpp SerialServer.cpp ParallelServer.cpp crc32.c Cache.cpp ServerException.cpp ProblemInput.cpp MessageStructure.cpp AStarProblem.cpp FindGraphPath.cpp BestFSProblem.cpp BFSProblem.cpp DFSProblem.cpp GraphPathService.cpp split.cpp GraphElement.cpp MatrixCreate.cpp matrix/Matrix.cpp matrix/MatrixException.cpp ProblemException.cpp FindGraphPathInfo.cpp GraphPath.cpp file_reading.cpp)
 target_link_libraries (ex3.out ${CMAKE_THREAD_LIBS_INIT})
 
 
