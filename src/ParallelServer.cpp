@@ -24,6 +24,7 @@ void threadFunction(std::queue<int> &connections, ClientHandler *handler) {
       const int client = connections.front();
       connections.pop();
       pthread_mutex_unlock(&g_mutex);
+      std::cout << "client connected." << std::endl;
       handler->serveClient(client);
     } else {
       pthread_mutex_unlock(&g_mutex);
@@ -34,9 +35,9 @@ void threadFunction(std::queue<int> &connections, ClientHandler *handler) {
 void server_side::ParallelServer::open(const int port,
                                        std::unique_ptr<ClientHandler> handler) {
   std::queue<int> connectionsQueue;
-
-  std::thread threadPool[100];
-  for (uint32_t i = 0; i < 100; ++i) {
+  const int threadPoolSize = 100;
+  std::thread threadPool[threadPoolSize];
+  for (uint32_t i = 0; i < threadPoolSize; ++i) {
     threadPool[i] =
         std::thread(threadFunction, std::ref(connectionsQueue), handler.get());
   }
@@ -52,7 +53,7 @@ void server_side::ParallelServer::open(const int port,
   if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
     throw ServerException("bind failed.");
   }
-  if (listen(server_fd, 65535) < 0) {
+  if (listen(server_fd, 500) < 0) {
     throw ServerException("listen failed.");
   }
   std::cout << "waiting fot connections." << std::endl;
@@ -62,9 +63,12 @@ void server_side::ParallelServer::open(const int port,
                            (socklen_t *)&addrlen)) < 0) {
       throw ServerException("accept client failed.");
     }
-    std::cout << "client connected." << std::endl;
     pthread_mutex_lock(&g_mutex);
     connectionsQueue.push(clientfd);
     pthread_mutex_unlock(&g_mutex);
+    if (clientfd == FD_SETSIZE - 1) {
+      close(clientfd);
+      std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    }
   }
 }
