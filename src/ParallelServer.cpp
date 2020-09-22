@@ -6,6 +6,8 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include <mutex>
+#include <queue>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <thread>
@@ -13,8 +15,31 @@
 #include <unistd.h>
 #include <vector>
 
+pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void threadFunction(std::queue<int> &connections, ClientHandler *handler) {
+  while (true) {
+    pthread_mutex_lock(&g_mutex);
+    if (!connections.empty()) {
+      const int client = connections.front();
+      connections.pop();
+      pthread_mutex_unlock(&g_mutex);
+      handler->serveClient(client);
+    } else {
+      pthread_mutex_unlock(&g_mutex);
+    }
+  }
+}
+
 void server_side::ParallelServer::open(const int port,
-                                  std::unique_ptr<ClientHandler> handler) {
+                                       std::unique_ptr<ClientHandler> handler) {
+  std::queue<int> connectionsQueue;
+
+  std::thread threadPool[100];
+  for (uint32_t i = 0; i < 100; ++i) {
+    threadPool[i] =
+        std::thread(threadFunction, std::ref(connectionsQueue), handler.get());
+  }
   struct sockaddr_in address;
   int addrlen = sizeof(address);
   int server_fd;
@@ -31,7 +56,6 @@ void server_side::ParallelServer::open(const int port,
     throw ServerException("listen failed.");
   }
   std::cout << "waiting fot connections." << std::endl;
-    std::vector<std::thread> threads={};
   while (true) {
     int clientfd;
     if ((clientfd = accept(server_fd, (struct sockaddr *)&address,
@@ -39,6 +63,8 @@ void server_side::ParallelServer::open(const int port,
       throw ServerException("accept client failed.");
     }
     std::cout << "client connected." << std::endl;
-    threads.emplace_back(std::thread(&ClientHandler::serveClient, handler.get(), clientfd));
+    pthread_mutex_lock(&g_mutex);
+    connectionsQueue.push(clientfd);
+    pthread_mutex_unlock(&g_mutex);
   }
 }
