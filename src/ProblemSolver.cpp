@@ -15,7 +15,6 @@
 #include <thread>
 #include <threads.h>
 #include <unistd.h>
-using namespace std::chrono;
 
 inline bool ends_with(std::string const &value, std::string const &ending) {
   if (ending.size() > value.size())
@@ -24,13 +23,13 @@ inline bool ends_with(std::string const &value, std::string const &ending) {
 }
 
 void timer(const long waitTime, bool &finished, bool &timeoutPassed) {
-  long start = duration_cast<milliseconds>(
+  long start = std::chrono::duration_cast<std::chrono::milliseconds>(
                    std::chrono::system_clock::now().time_since_epoch())
                    .count();
   while (true) {
-    long current =
-        duration_cast<milliseconds>(system_clock::now().time_since_epoch())
-            .count();
+    long current = std::chrono::duration_cast<std::chrono::milliseconds>(
+                       std::chrono::system_clock::now().time_since_epoch())
+                       .count();
     if (current > start + waitTime) {
       timeoutPassed = true;
       return;

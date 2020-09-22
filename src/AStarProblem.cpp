@@ -6,9 +6,9 @@
 #include "ProblemException.hpp"
 #include "matrix/Matrix.hpp"
 #include <queue>
-using namespace server_side;
 
-std::unique_ptr<Solution> AStarProblem::solveProblem() const {
+std::unique_ptr<server_side::Solution>
+server_side::AStarProblem::solveProblem() const {
 
   matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight(),
                                           m_info.getMatrix().getWidth());
@@ -78,6 +78,6 @@ std::unique_ptr<Solution> AStarProblem::solveProblem() const {
   throw ProblemException(ErrorCode::NO_PATH);
 }
 
-AStarProblem::AStarProblem(const FindGraphPathInfo &info)
+server_side::AStarProblem::AStarProblem(const FindGraphPathInfo &info)
     : FindGraphPath(info) {}
-std::string AStarProblem::algorithmName() const { return "A*"; }
+std::string server_side::AStarProblem::algorithmName() const { return "A*"; }

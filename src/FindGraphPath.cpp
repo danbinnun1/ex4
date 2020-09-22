@@ -8,9 +8,7 @@
 #include "GraphPath.hpp"
 #include "ProblemException.hpp"
 
-using namespace server_side;
-
-std::unique_ptr<Solution> FindGraphPath::solve() const {
+std::unique_ptr<server_side::Solution> server_side::FindGraphPath::solve() const {
   if(!cacheExists()){
     createCache();
   }
@@ -23,4 +21,4 @@ std::unique_ptr<Solution> FindGraphPath::solve() const {
   return solution;
 }
 
-FindGraphPath::FindGraphPath(const FindGraphPathInfo &info) : m_info(info) {}
+server_side::FindGraphPath::FindGraphPath(const FindGraphPathInfo &info) : m_info(info) {}
