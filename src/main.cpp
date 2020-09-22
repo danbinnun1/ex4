@@ -1,12 +1,12 @@
 #include "Cache.hpp"
-#include <iostream>
-#include <string.h>
 #include "ClientHandler.hpp"
-#include "ProblemSolver.hpp"
-#include "Server.hpp"
-#include "SerialServer.hpp"
 #include "ParallelServer.hpp"
+#include "ProblemSolver.hpp"
+#include "SerialServer.hpp"
+#include "Server.hpp"
+#include <iostream>
 #include <memory>
+#include <string.h>
 
 bool is_int(const std::string &s) {
   std::string::const_iterator it = s.begin();
@@ -29,14 +29,17 @@ int main(int argc, char *argv[]) {
   }
   int port = std::stol(argv[1]);
   if (argc == 2) {
-    //server_side::ReaderServer server("\r\n", 50, 5000);
-    //server.open(port);
+    std::unique_ptr<server_side::Server> server =
+        std::make_unique<server_side::ParallelServer>();
+    server->open(port, std::make_unique<server_side::ProblemSolver>());
   } else {
     if (strcmp(argv[2], "serial") == 0) {
-      std::unique_ptr<server_side::Server> server=std::make_unique<server_side::SerialServer>();
+      std::unique_ptr<server_side::Server> server =
+          std::make_unique<server_side::SerialServer>();
       server->open(port, std::make_unique<server_side::ProblemSolver>());
     } else if (strcmp(argv[2], "parallel") == 0) {
-      std::unique_ptr<server_side::Server> server=std::make_unique<server_side::ParallelServer>();
+      std::unique_ptr<server_side::Server> server =
+          std::make_unique<server_side::ParallelServer>();
       server->open(port, std::make_unique<server_side::ProblemSolver>());
     } else {
       std::cerr << "invalid server type parameter" << std::endl;
