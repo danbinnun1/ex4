@@ -1,5 +1,5 @@
 #pragma once
-namespace server_side{
+namespace server_side {
 enum ErrorCode {
   NO_ERROR,
   NO_PATH,

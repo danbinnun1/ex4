@@ -7,7 +7,8 @@
 #include "matrix/Matrix.hpp"
 #include <stack>
 
-std::unique_ptr<server_side::Solution> server_side::DFSProblem::solveProblem() const {
+std::unique_ptr<server_side::Solution>
+server_side::DFSProblem::solveProblem() const {
   matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight(),
                                           m_info.getMatrix().getWidth());
   std::stack<GraphPathService> stack;
@@ -73,5 +74,6 @@ std::unique_ptr<server_side::Solution> server_side::DFSProblem::solveProblem() c
   // If DFS is complete without visiting target
   throw ProblemException(ErrorCode::NO_PATH);
 }
-server_side::DFSProblem::DFSProblem(const FindGraphPathInfo &info) : FindGraphPath(info) {}
+server_side::DFSProblem::DFSProblem(const FindGraphPathInfo &info)
+    : FindGraphPath(info) {}
 std::string server_side::DFSProblem::algorithmName() const { return "DFS"; }

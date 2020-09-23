@@ -7,7 +7,8 @@
 #include "matrix/Matrix.hpp"
 #include <list>
 
-std::unique_ptr<server_side::Solution> server_side::BFSProblem::solveProblem() const {
+std::unique_ptr<server_side::Solution>
+server_side::BFSProblem::solveProblem() const {
   matrix::Matrix visited = matrix::Matrix(m_info.getMatrix().getHeight(),
                                           m_info.getMatrix().getWidth());
   std::list<GraphPathService> queue;
@@ -74,5 +75,6 @@ std::unique_ptr<server_side::Solution> server_side::BFSProblem::solveProblem() c
   throw ProblemException(ErrorCode::NO_PATH);
 }
 
-server_side::BFSProblem::BFSProblem(const FindGraphPathInfo &info) : FindGraphPath(info) {}
+server_side::BFSProblem::BFSProblem(const FindGraphPathInfo &info)
+    : FindGraphPath(info) {}
 std::string server_side::BFSProblem::algorithmName() const { return "BFS"; }

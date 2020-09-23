@@ -14,14 +14,15 @@ bool server_side::cacheExists() {
   return stat("cache", &buffer) != -1 && S_ISDIR(buffer.st_mode);
 }
 
-std::string server_side::searchByHash(const std::string& inputHash) {
-  return readFileContent("cache/"+inputHash);
+std::string server_side::searchByHash(const std::string &inputHash) {
+  return readFileContent("cache/" + inputHash);
 }
-bool server_side::solutionInCache(const std::string& inputHash) {
-  
-  std::ifstream infile("cache/"+inputHash);
+bool server_side::solutionInCache(const std::string &inputHash) {
+
+  std::ifstream infile("cache/" + inputHash);
   return infile.good();
 }
-void server_side::insert(const std::string& inputHash, const std::string &result) {
-  writeFileContent("cache/"+inputHash,result);
+void server_side::insert(const std::string &inputHash,
+                         const std::string &result) {
+  writeFileContent("cache/" + inputHash, result);
 }
