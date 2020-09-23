@@ -22,15 +22,15 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
   if (rows.size() == 0) {
     throw ProblemException(NO_MATRIX_SENT);
   }
-  auto matrixSizes = splitByComma(rows[0]);
+  const auto matrixSizes = splitByComma(rows[0]);
   if (matrixSizes.size() != 2) {
     throw ProblemException(FIRST_LINE_DOES_NOT_REPRESENT_MATRIX_SIZE);
   }
   if (!is_number(matrixSizes[0]) || !is_number(matrixSizes[1])) {
     throw ProblemException(MATRIX_HEIGHT_AND_WIDTH_ARE_NOT_INTEGERS);
   }
-  uint32_t height = std::stol(matrixSizes[0]);
-  uint32_t width = std::stol(matrixSizes[1]);
+  const uint32_t height = std::stol(matrixSizes[0]);
+  const uint32_t width = std::stol(matrixSizes[1]);
   if (height == 0 || width == 0) {
     throw ProblemException(HEIGHT_OR_WIDTH_IS_ZERO);
   }
@@ -58,8 +58,8 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
       }
     }
   }
-  auto startPoint = splitByComma(rows[rows.size() - 2]);
-  auto endPoint = splitByComma(rows[rows.size() - 1]);
+  const auto startPoint = splitByComma(rows[rows.size() - 2]);
+  const auto endPoint = splitByComma(rows[rows.size() - 1]);
   if (startPoint.size() != 2 || endPoint.size() != 2) {
     throw ProblemException(START_AND_END_POINTS_DO_NOT_HAVE_TWO_COORDINATES);
   }
@@ -67,10 +67,10 @@ server_side::parseMatrix(const std::vector<std::string> &rows) {
       !is_number(endPoint[0]) || !is_number(endPoint[1])) {
     throw ProblemException(START_AND_END_POINTS_COORDINATED_ARE_NOT_INTEGERS);
   }
-  uint32_t startRow = std::stol(startPoint[0]);
-  uint32_t startCol = std::stol(startPoint[1]);
-  uint32_t endRow = std::stol(endPoint[0]);
-  uint32_t endCol = std::stol(endPoint[1]);
+  const uint32_t startRow = std::stol(startPoint[0]);
+  const uint32_t startCol = std::stol(startPoint[1]);
+  const uint32_t endRow = std::stol(endPoint[0]);
+  const uint32_t endCol = std::stol(endPoint[1]);
   if (startCol >= width || startRow >= height || endRow >= height ||
       endCol >= width) {
     throw ProblemException(START_OR_END_POINTS_ARE_OUT_OF_THE_MATRIX);

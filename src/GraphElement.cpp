@@ -1,5 +1,4 @@
 #include "GraphElement.hpp"
-#include <stdint.h>
 
 server_side::GraphElement::GraphElement(uint32_t row, uint32_t col):m_row(row),m_col(col){}
 

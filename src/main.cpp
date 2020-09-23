@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
       std::cerr << "invalid port" << std::endl;
       return -1;
     }
-    int port = std::stol(argv[1]);
+    const int port = std::stol(argv[1]);
     if (argc == 2) {
       std::unique_ptr<server_side::Server> server =
           std::make_unique<server_side::ParallelServer>();

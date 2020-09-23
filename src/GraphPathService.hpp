@@ -19,7 +19,7 @@ public:
   std::vector<Direction> getPath() const;
   double getPathWeight() const;
   double getLastWeight() const;
-  GraphElement applyPath(FindGraphPathInfo info);
+  GraphElement applyPath(const FindGraphPathInfo& info);
 };
 
 struct LargerThanByPathWeight

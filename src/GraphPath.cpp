@@ -4,8 +4,8 @@
 #include "split.hpp"
 #include <string.h>
 
-server_side::GraphPath::GraphPath(const std::string &algorithm,
-                                  const std::vector<Direction> &path,
+server_side::GraphPath::GraphPath(std::string algorithm,
+                                  std::vector<Direction> path,
                                   double pathWeight)
     : m_path(path), m_algorithm(algorithm), m_pathWeight(pathWeight) {}
 std::string server_side::GraphPath::toString() const {
@@ -28,7 +28,7 @@ std::string server_side::GraphPath::toString() const {
   return s;
 }
 
-server_side::GraphPath::GraphPath(std::string s){
+server_side::GraphPath::GraphPath(const std::string& s){
     auto parts=splitByComma(s);
     m_pathWeight=std::stod(parts[0]);
     m_algorithm=parts[1];

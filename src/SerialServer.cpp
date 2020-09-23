@@ -15,7 +15,7 @@
 void server_side::SerialServer::open(const int port,
                                      std::unique_ptr<ClientHandler> handler) {
   struct sockaddr_in address;
-  int addrlen = sizeof(address);
+  const int addrlen = sizeof(address);
   int server_fd;
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
     throw ServerException("socket failed.");

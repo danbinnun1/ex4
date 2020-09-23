@@ -46,8 +46,8 @@ void readMessage(bool &finished, int connfd, char *buffer) {
     ;
   finished = true;
 }
-void readMessageWithTimeout(int connfd, char *buffer, bool &recievedMessage,
-                            long waitTime) {
+void readMessageWithTimeout(const int connfd, char *buffer, bool &recievedMessage,
+                            const long waitTime) {
   bool finished = false;
   bool timeoutPassed = false;
   std::thread readClinetMessage(readMessage, std::ref(finished), connfd,
@@ -76,7 +76,7 @@ void server_side::ProblemSolver::serveClient(const int connfd) {
     std::cout << "client sent message:" << buffer << std::endl;
     std::unique_ptr<ProblemInput> input =
         std::make_unique<ProblemInput>(buffer);
-    auto requestApproval = getStructure(NO_ERROR, "");
+    const auto requestApproval = getStructure(NO_ERROR, "");
     send(connfd, requestApproval.data(), requestApproval.size(), 0);
     bool clientFinished = false;
     while (!clientFinished) {
@@ -85,12 +85,12 @@ void server_side::ProblemSolver::serveClient(const int connfd) {
       if (!recievedMessage) {
         return;
       }
-      std::string row = std::string(buffer);
+      const std::string row = std::string(buffer);
 
-      std::string enter = "\r\n";
+      const std::string enter = "\r\n";
       if (ends_with(row, enter + enter)) {
-        std::string h = row.substr(0, row.size() - enter.size() - enter.size());
-        input->addRow(h);
+        std::string rowWithoutEnter = row.substr(0, row.size() - enter.size() - enter.size());
+        input->addRow(rowWithoutEnter);
         clientFinished = true;
       } else {
         input->addRow(row);
@@ -99,11 +99,11 @@ void server_side::ProblemSolver::serveClient(const int connfd) {
     std::unique_ptr<Problem> p = input->parse();
     std::unique_ptr<Solution> s = p->solve();
     std::string solution = s->toString();
-    auto message = getStructure(NO_ERROR, solution);
+    const auto message = getStructure(NO_ERROR, solution);
     send(connfd, message.data(), message.size(), 0);
     std::cout << "client finished and got message back." << std::endl;
   } catch (const ProblemException &e) {
-    auto message = getStructure(e.getCode(), "");
+    const auto message = getStructure(e.getCode(), "");
     send(connfd, message.data(), message.size(), 0);
     std::cout << "client finished and got message back." << std::endl;
 

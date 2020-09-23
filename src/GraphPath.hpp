@@ -12,8 +12,8 @@ private:
   double m_pathWeight;
 
 public:
-  GraphPath(const std::string &algorithm, const std::vector<Direction> &path, double pathWeight);
+  GraphPath(std::string algorithm, std::vector<Direction> path, double pathWeight);
   std::string toString() const override;
-  GraphPath(std::string s);
+  GraphPath(const std::string& s);
 };
 }
