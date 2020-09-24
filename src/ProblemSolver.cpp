@@ -34,6 +34,7 @@ void timer(const long waitTime, bool &finished, bool &timeoutPassed) {
       timeoutPassed = true;
       return;
     }
+    //checks wheater the task is done so it can stop the timer
     if (finished) {
       timeoutPassed = false;
       return;
@@ -53,6 +54,7 @@ void readMessageWithTimeout(const int connfd, char *buffer, bool &recievedMessag
   std::thread readClinetMessage(readMessage, std::ref(finished), connfd,
                                 buffer);
   timer(waitTime, std::ref(finished), std::ref(timeoutPassed));
+  //check wheater the task was done or the timeout passed
   if (timeoutPassed) {
     shutdown(connfd, SHUT_RD);
     close(connfd);
@@ -79,6 +81,7 @@ void server_side::ProblemSolver::serveClient(const int connfd) {
     const auto requestApproval = getStructure(NO_ERROR, "");
     send(connfd, requestApproval.data(), requestApproval.size(), 0);
     bool clientFinished = false;
+    //loop keeps going until client sends \r\n\r\n
     while (!clientFinished) {
       memset(buffer, 0, sizeof(buffer));
       readMessageWithTimeout(connfd, buffer, recievedMessage, 5000);

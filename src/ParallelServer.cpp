@@ -16,7 +16,7 @@
 #include <vector>
 
 pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
-
+//this function always checks if there is a pending connection in the queue, and if there is, it serves it.
 void threadFunction(std::queue<int> &connections, ClientHandler *handler) {
   while (true) {
     pthread_mutex_lock(&g_mutex);
@@ -66,6 +66,7 @@ void server_side::ParallelServer::open(const int port,
     pthread_mutex_lock(&g_mutex);
     connectionsQueue.push(clientfd);
     pthread_mutex_unlock(&g_mutex);
+    //connection file descriptor can't reach 1024, so when it gets to 1023, we have to close it and wait for clients to finish
     if (clientfd == FD_SETSIZE - 1) {
       close(clientfd);
       std::this_thread::sleep_for(std::chrono::milliseconds(5000));

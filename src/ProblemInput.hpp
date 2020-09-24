@@ -11,6 +11,7 @@ private:
 
 public:
   ProblemInput(std::string problemRequest);
+  //parses the input and returns a problem object
   std::unique_ptr<Problem> parse() const;
   void addRow(const std::string &row);
 };
